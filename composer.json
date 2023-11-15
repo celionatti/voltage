@@ -1,0 +1,22 @@
+{
+    "name": "celionatti/voltage",
+    "description": "A mini PHP MVC plugins library",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "celionatti\\Voltage\\": "Volt/",
+            "Voltage\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "celionatti",
+            "email": "amisuusman@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
