@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace celionatti\Voltage;
 
+use celionatti\Voltage\Resolver\AssetResolver;
+use celionatti\Voltage\Resolver\PathResolver;
+
 /**
  * ==============================================
  * ==================           =================
@@ -21,16 +24,29 @@ namespace celionatti\Voltage;
 
 class Voltage
 {
+    public Config $config;
+    public ?Controller $controller;
+    public VoltExtension $extension;
+    public static Voltage $voltage;
+    public PathResolver $pathResolver;
+    public AssetResolver $assetResolver;
+
     public function __construct()
     {
         $this->require_files();
+        $this->extension = new VoltExtension();
+        $this->extension->checkExtensions();
+        self::$voltage = $this;
+        $this->pathResolver = new PathResolver(rootDir());
+        $this->assetResolver = new AssetResolver(URL_ROOT);
+
+        $this->config = new Config();
+        $this->config::load($this->pathResolver->base_path(CONFIG_ROOT));
 
         $packages = get_package_folders('packages/', function ($packagePath) {
             // Custom filter: Include only packages containing a specific file
             return file_exists($packagePath . DIRECTORY_SEPARATOR . 'install.json');
         }, true);
-
-        var_dump($packages);
     }
 
     private function require_files()
@@ -38,13 +54,24 @@ class Voltage
         return [
             require __DIR__ . "/Configs/functions.php",
             require __DIR__ . "/Configs/globals.php",
-            // require rootDir() . "/configs/load.php",
-            // require rootDir() . "/utils/functions.php"
+            require rootDir() . "/configs/load.php",
         ];
+    }
+
+    private function include_package_routes(): void
+    {
+        $routes = $this->pathResolver->package_router_path();
+
+        if ($routes !== null) {
+            foreach ($routes as $routeFile) {
+                require $routeFile;
+            }
+        }
     }
 
     public function run()
     {
-
+        require $this->pathResolver->router_path("web");
+        $this->include_package_routes();
     }
 }

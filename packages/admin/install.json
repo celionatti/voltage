@@ -1,3 +1,4 @@
 {
-    "name":"admin"
+    "name":"admin",
+    "active":true
 }

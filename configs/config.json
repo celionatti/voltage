@@ -1,0 +1,12 @@
+{
+    "version": "1.0.0",
+    "debug_mode": true,
+    "volt_database": {
+        "drivers": "mysql",
+        "host": "127.0.0.1",
+        "username": "root",
+        "password": "",
+        "dbname": "voltage"
+    },
+    "app_name": "Voltage plugins"
+}
