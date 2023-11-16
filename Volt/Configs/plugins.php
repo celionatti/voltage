@@ -65,7 +65,7 @@ function doFilter($hook, $value, $args = array())
     return $value;
 }
 
-function get_package_folders($packages_folder = 'packages/', $filter = null, $includeInfo = false, $requiredSubfolders = [])
+function getPackageFolders($packages_folder = 'packages/', $filter = null, $includeInfo = false, $requiredSubfolders = [])
 {
     $result = [];
 
@@ -89,8 +89,8 @@ function get_package_folders($packages_folder = 'packages/', $filter = null, $in
 
                 // Include additional information about the plugin if requested
                 if ($includeInfo) {
-                    $packageInfo['files'] = get_package_files($folderPath);
-                    $packageInfo['subfolders'] = get_package_subfolders($folderPath);
+                    $packageInfo['files'] = getPackageFiles($folderPath);
+                    $packageInfo['subfolders'] = getPackageSubfolders($folderPath);
 
                     // Check if the required subfolders are present in the package
                     $missingRequiredSubfolders = array_diff($requiredSubfolders, $packageInfo['subfolders']);
@@ -108,9 +108,9 @@ function get_package_folders($packages_folder = 'packages/', $filter = null, $in
     return $result;
 }
 
-function load_packages($packages_folder = 'packages/', $filter = null, $includeInfo = false, $requiredSubfolders = [])
+function loadPackages($packages_folder = 'packages/', $filter = null, $includeInfo = false, $requiredSubfolders = [])
 {
-    $packages = get_package_folders($packages_folder, $filter, $includeInfo, $requiredSubfolders);
+    $packages = getPackageFolders($packages_folder, $filter, $includeInfo, $requiredSubfolders);
     $loadedPackages = [];
     $existingIds = [];
 
@@ -210,7 +210,7 @@ function load_packages($packages_folder = 'packages/', $filter = null, $includeI
 }
 
 // Helper function to get files within a package folder
-function get_package_files($packagePath)
+function getPackageFiles($packagePath)
 {
     $files = scandir($packagePath);
     $result = [];
@@ -227,7 +227,7 @@ function get_package_files($packagePath)
 }
 
 // Helper function to get subfolders within a package folder
-function get_package_subfolders($packagePath)
+function getPackageSubfolders($packagePath)
 {
     $subfolders = scandir($packagePath);
     $result = [];

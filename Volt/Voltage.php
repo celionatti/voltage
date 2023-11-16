@@ -37,27 +37,14 @@ class Voltage
     public Request $request;
     public Response $response;
     public Router $router;
-    
+
     public function __construct()
     {
         $this->require_files();
-        $this->extension = new VoltExtension();
-        $this->extension->checkExtensions();
+        $this->initializeComponents();
         self::$voltage = $this;
-        $this->pathResolver = new PathResolver(rootDir());
-        $this->assetResolver = new AssetResolver(URL_ROOT);
-
-        $this->request = new Request();
-        $this->response = new Response();
-        $this->router = new Router($this->request, $this->response);
-
-        $this->config = new Config();
-        $this->config::load($this->pathResolver->base_path(CONFIG_ROOT));
-
-        load_packages('packages/', function ($packagePath) {
-            // Custom filter: Include only packages containing a specific file
-            return file_exists($packagePath . DIRECTORY_SEPARATOR . 'install.json');
-        }, true, ['styles', 'scripts', 'images']);
+        $this->loadConfiguration();
+        $this->loadPackages();
     }
 
     private function require_files()
@@ -70,23 +57,50 @@ class Voltage
         ];
     }
 
-    public function include_package_routes(): void
+    private function initializeComponents(): void
     {
-        $routes = $this->pathResolver->package_router_path();
-
-        if ($routes !== null) {
-            foreach ($routes as $routeFile) {
-                require $routeFile;
-            }
-        }
+        $this->extension = new VoltExtension();
+        $this->extension->checkExtensions();
+        $this->pathResolver = new PathResolver(rootDir());
+        $this->assetResolver = new AssetResolver(URL_ROOT);
+        $this->request = new Request();
+        $this->response = new Response();
+        $this->router = new Router($this->request, $this->response);
     }
 
-    public function run()
+    private function loadConfiguration(): void
+    {
+        $this->config = new Config();
+        $this->config::load($this->pathResolver->basePath(CONFIG_ROOT));
+    }
+
+    private function loadPackages(): void
+    {
+        loadPackages('packages/', function ($packagePath) {
+            // Custom filter: Include only packages containing a specific file
+            return file_exists($packagePath . DIRECTORY_SEPARATOR . 'install.json');
+        }, true, ['styles', 'scripts', 'images']);
+    }
+
+    /**
+     * Run the application.
+     */
+    public function run(): void
     {
         try {
             $this->router->resolve();
         } catch (VoltException $e) {
-            throw $e;
+            // Handle VoltException
+            // Log or rethrow if necessary
+            throw new VoltException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Get the instance of Voltage.
+     */
+    public static function getInstance(): Voltage
+    {
+        return self::$voltage;
     }
 }

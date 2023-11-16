@@ -1,4 +1,5 @@
 /vendor/
+/logs/
 .env
 /node_modules/
 /vscode/

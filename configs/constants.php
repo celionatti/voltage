@@ -11,3 +11,9 @@ declare(strict_types=1);
 
 const CONFIG_ROOT = "configs/config.json";
 const URL_ROOT = "http://localhost:9999/";
+const VOLT_DATABASE = "volt_database";
+const DB_NAME = "";
+const DB_USERNAME = "root";
+const DB_PASSWORD = "";
+const DB_DRIVERS = "mysql";
+const DB_HOST = "localhost";
