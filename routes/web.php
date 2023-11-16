@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use celionatti\Voltage\Voltage;
+
 /**
  * Library Name: Voltage
  * Author: Celio Natti
@@ -9,3 +11,8 @@ declare(strict_types=1);
  * Year: 2023
  */
 
+ /** @var Voltage $voltage */
+
+// $voltage->router->get("/", function () {
+//     echo "Hello World";
+// });

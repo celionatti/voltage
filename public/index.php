@@ -29,4 +29,13 @@ $dotenv->load();
 
 $voltage = new Voltage();
 
+require $voltage->pathResolver->router_path("web");
+$routes = $voltage->pathResolver->package_router_path();
+
+if ($routes !== null) {
+    foreach ($routes as $routeFile) {
+        require $routeFile;
+    }
+}
+
 $voltage->run();

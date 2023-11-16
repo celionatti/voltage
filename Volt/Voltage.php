@@ -11,8 +11,12 @@ declare(strict_types=1);
 
 namespace celionatti\Voltage;
 
-use celionatti\Voltage\Resolver\AssetResolver;
+use celionatti\Voltage\HTTP\Request;
+use celionatti\Voltage\HTTP\Response;
+use celionatti\Voltage\Router\Router;
 use celionatti\Voltage\Resolver\PathResolver;
+use celionatti\Voltage\Resolver\AssetResolver;
+use celionatti\Voltage\Exceptions\VoltException;
 
 /**
  * ==============================================
@@ -30,7 +34,10 @@ class Voltage
     public static Voltage $voltage;
     public PathResolver $pathResolver;
     public AssetResolver $assetResolver;
-
+    public Request $request;
+    public Response $response;
+    public Router $router;
+    
     public function __construct()
     {
         $this->require_files();
@@ -39,6 +46,10 @@ class Voltage
         self::$voltage = $this;
         $this->pathResolver = new PathResolver(rootDir());
         $this->assetResolver = new AssetResolver(URL_ROOT);
+
+        $this->request = new Request();
+        $this->response = new Response();
+        $this->router = new Router($this->request, $this->response);
 
         $this->config = new Config();
         $this->config::load($this->pathResolver->base_path(CONFIG_ROOT));
@@ -59,7 +70,7 @@ class Voltage
         ];
     }
 
-    private function include_package_routes(): void
+    public function include_package_routes(): void
     {
         $routes = $this->pathResolver->package_router_path();
 
@@ -72,7 +83,10 @@ class Voltage
 
     public function run()
     {
-        require $this->pathResolver->router_path("web");
-        // $this->include_package_routes();
+        try {
+            $this->router->resolve();
+        } catch (VoltException $e) {
+            throw $e;
+        }
     }
 }

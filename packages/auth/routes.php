@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+
+use celionatti\Voltage\Voltage;
+
 /**
  * Library Name: Voltage
  * Author: Celio Natti
@@ -9,6 +12,8 @@ declare(strict_types=1);
  * Year: 2023
  */
 
-echo "Auth Package Route";
-echo "<pre>";
-var_dump($_SERVER);
+ /** @var Voltage $voltage */
+
+$voltage->router->get("/", function () {
+    echo "Auth Package - Hello World";
+});

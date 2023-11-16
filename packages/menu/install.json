@@ -2,7 +2,7 @@
   "name": "menu",
   "id":"menu",
   "index":0,
-  "active": true,
+  "active": false,
   "page": ["*"],
   "version":"1.0.0",
   "author": "celio natti",
