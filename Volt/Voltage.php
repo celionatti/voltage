@@ -43,16 +43,17 @@ class Voltage
         $this->config = new Config();
         $this->config::load($this->pathResolver->base_path(CONFIG_ROOT));
 
-        $packages = get_package_folders('packages/', function ($packagePath) {
+        load_packages('packages/', function ($packagePath) {
             // Custom filter: Include only packages containing a specific file
             return file_exists($packagePath . DIRECTORY_SEPARATOR . 'install.json');
-        }, true);
+        }, true, ['styles', 'scripts', 'images']);
     }
 
     private function require_files()
     {
         return [
             require __DIR__ . "/Configs/functions.php",
+            require __DIR__ . "/Configs/plugins.php",
             require __DIR__ . "/Configs/globals.php",
             require rootDir() . "/configs/load.php",
         ];
@@ -72,6 +73,6 @@ class Voltage
     public function run()
     {
         require $this->pathResolver->router_path("web");
-        $this->include_package_routes();
+        // $this->include_package_routes();
     }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "admin",
-  "id":"admin",
-  "index":2,
+  "name": "menu",
+  "id":"menu",
+  "index":0,
   "active": true,
   "page": ["*"],
   "version":"1.0.0",

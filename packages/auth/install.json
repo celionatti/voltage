@@ -1,4 +1,12 @@
 {
-    "name":"auth",
-    "active":true
-}
+    "name": "auth",
+    "id":"auth",
+    "index":1,
+    "active": true,
+    "page": ["*"],
+    "version":"1.0.0",
+    "author": "celio natti",
+    "thumbnail": "",
+    "dependencies": {}
+  }
+  
