@@ -1,0 +1,1 @@
+<?php echo $this->escape(<?php hello world - Me); ?>

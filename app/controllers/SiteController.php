@@ -24,5 +24,14 @@ use celionatti\Voltage\Controller;
 
 class SiteController extends Controller
 {
-
+    public function index()
+    {
+        $data = [
+            'title' => '<strong>Hello, World!</strong>', // Will be escaped if autoescape is true
+            'content' => 'This is a more advanced view template engine using .volt syntax.',
+            'amount' => 12345.67,
+        ];
+        
+        $this->view->render("welcome", $data);
+    }
 }

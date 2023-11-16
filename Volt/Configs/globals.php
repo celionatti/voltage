@@ -13,3 +13,6 @@ declare(strict_types=1);
 $actions = array();
 
 $filters = array();
+
+const TEMPLATE_DIR = "templates";
+const CACHE_DIR = "cache";

@@ -72,82 +72,156 @@ function consoleLogger(string $message, bool $die = false, bool $timestamp = tru
         die();
     }
 }
-
 function dd($value): void
 {
     echo <<<HTML
-    <html>
+    <!DOCTYPE html>
+    <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             body {
+                font-family: 'Arial', sans-serif;
                 margin: 0;
                 padding: 0;
-                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #E6F7FF;
             }
 
-            .dd-container {
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
+            .sf-dump-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+                height: 100vh;
             }
 
-            .dd-box {
-                background-color: #FFF;
-                border: 1px solid #E0E0E0;
+            .sf-dump {
+                font: 13px Menlo, Monaco, monospace;
+                direction: ltr;
+                text-align: left;
+                white-space: pre;
+                word-wrap: normal;
+                background: #282828;
+                color: #eeeeee;
+                line-height: 1.2;
+                margin: 0;
+                padding: 16px;
                 border-radius: 5px;
-                padding: 20px;
-                text-align: center;
-                max-width: 80%;
-                overflow-x: auto;
+                overflow: hidden;
+                z-index: 100000;
+                grid-column: 2; /* Specify the column for the dump content */
             }
 
-            h2 {
-                text-transform: uppercase;
-                color: #333;
-                font-weight: bold;
-                font-size: 24px;
+            .sf-dump-two {
+                font: 12px 'Arial', sans-serif; /* Use a standard font for readability */
+                background: #f0f0f0; /* Change to your desired background color */
+                color: #333; /* Change to your desired text color */
+                line-height: 1.2;
+                margin: 0;
+                padding: 16px;
+                border-radius: 5px;
+                overflow: hidden;
+                z-index: 100000;
+                grid-column: 1; /* Specify the column for the dump content */
             }
 
-            pre {
-                background-color: #000;
-                color: lightgreen;
-                margin: 5px;
-                padding: 10px;
-                border: 3px solid teal;
-                white-space: pre-wrap;
+            .sf-dump span {
+                display: inline;
+            }
+
+            .sf-dump a {
+                color: #52e3f6;
+                text-decoration: none;
+            }
+
+            .sf-dump a:hover {
+                text-decoration: underline;
+            }
+
+            .sf-dump a:visited {
+                color: #5e84ea;
+            }
+
+            .sf-dump .sf-dump-public {
+                color: #568f3e;
+            }
+
+            .sf-dump .sf-dump-protected {
+                color: #568f3e;
+            }
+
+            .sf-dump .sf-dump-private {
+                color: #568f3e;
+            }
+
+            .sf-dump .sf-dump-ellipsis {
                 font-weight: bold;
-                font-size: 18px;
+                color: #52e3f6;
+            }
+
+            .sf-dump .sf-dump-numeric {
+                color: #a0a0a0;
+            }
+
+            .sf-dump .sf-dump-null {
+                color: #aa0d91;
+            }
+
+            .sf-dump .sf-dump-bool {
+                color: #4d73bf;
+            }
+
+            .sf-dump .sf-dump-resource {
+                color: #6f42c1;
+            }
+
+            .sf-dump .sf-dump-string {
+                color: #df9355;
+            }
+
+            .sf-dump .sf-dump-key {
+                color: #a0a0a0;
+            }
+
+            .sf-dump .sf-dump-meta {
+                color: #b729d9;
+            }
+
+            .sf-dump .sf-dump-public.sf-dump-ellipsis,
+            .sf-dump .sf-dump-protected.sf-dump-ellipsis,
+            .sf-dump .sf-dump-private.sf-dump-ellipsis {
+                color: #52e3f6;
+            }
+
+            .sf-dump .sf-dump-sql {
+                color: #52e3f6;
             }
         </style>
     </head>
     <body>
-        <div class="dd-container">
-            <div class="dd-box">
-                <h2>PHPStrike - Dump and Die</h2>
-                <pre>
+        <div class="sf-dump-container">
+            <div class="sf-dump-two"></div>
+            <pre class="sf-dump">
+                <h4 class="sf-dump-public"><a>DETAILS</a></h4>
 HTML;
 
     var_dump($value);
 
     echo <<<HTML
-                </pre>
-            </div>
+            </pre>
         </div>
     </body>
     </html>
 HTML;
+
     die;
 }
 
 function dump($value, $die = true)
 {
-    echo "<pre>";
+    echo "<pre style='background:#282828; color:#52e3f6; padding:16px;border-radius:6px;overflow:hidden;word-wrap:normal;font: 12px Menlo, Monaco, monospace;text-align: left;white-space: pre;direction: ltr;line-height: 1.2;z-index: 100000;margin:0;font-size:15px;'>";
     var_dump($value);
+    echo "</pre>";
 
-    if($die) {
+    if ($die) {
         die;
     }
 }
