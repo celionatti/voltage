@@ -2,7 +2,7 @@
   "name": "admin",
   "id":"admin",
   "index":2,
-  "active": false,
+  "active": true,
   "page": ["*"],
   "version":"1.0.0",
   "author": "celio natti",

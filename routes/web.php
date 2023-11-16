@@ -13,6 +13,6 @@ use celionatti\Voltage\Voltage;
 
  /** @var Voltage $voltage */
 
-// $voltage->router->get("/", function () {
-//     echo "Hello World";
-// });
+$voltage->router->get("/", function () {
+    echo "Hello World";
+});

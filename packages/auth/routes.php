@@ -14,6 +14,6 @@ use celionatti\Voltage\Voltage;
 
  /** @var Voltage $voltage */
 
-$voltage->router->get("/", function () {
+$voltage->router->get("/auth", function () {
     echo "Auth Package - Hello World";
 });
