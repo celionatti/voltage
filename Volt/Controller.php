@@ -38,7 +38,7 @@ class Controller
     {
         $viewDir = rootDir() . DIRECTORY_SEPARATOR . TEMPLATE_DIR . DIRECTORY_SEPARATOR;
         $cacheDir = rootDir() . DIRECTORY_SEPARATOR . CACHE_DIR . DIRECTORY_SEPARATOR;
-        $this->view = new VoltTemplate($viewDir, $cacheDir, [
+        $this->view = new VoltTemplate($viewDir, [
             'debug' => true,
             'autoescape' => false,
             'cache' => false,

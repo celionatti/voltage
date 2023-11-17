@@ -4,50 +4,51 @@ declare(strict_types=1);
 
 namespace celionatti\Voltage\View;
 
-use Exception;
-
-/**
- * Library Name: Voltage
- * Author: Celio Natti
- * Version: 1.2.0
- * Year: 2023
- */
+use celionatti\Voltage\Exceptions\VoltException;
 
 class VoltTemplate
 {
-    // ... (previous class code)
+    protected $data = [];
+    protected $viewPath;
+    protected $environment;
+
+    // Constants for magic strings
+    const SECTION_PREFIX = '@section';
+    const EXTENDS_PREFIX = '@extends';
+
+    public function __construct(string $viewPath, array $environment = [])
+    {
+        $this->viewPath = $viewPath;
+        $this->environment = array_merge([
+            'debug' => false,
+            'autoescape' => true,
+            'functions' => [],
+        ], $environment);
+    }
 
     public function render(string $view, array $data = [])
     {
         try {
             $this->data = array_merge($this->data, $data);
-            $compiledFilePath = $this->getCompiledFilePath($view);
 
-            if (!$this->isCacheValid($compiledFilePath)) {
-                $compiledContent = $this->compile($view);
-                $this->putCompiledContent($compiledFilePath, $compiledContent);
-            }
-
-            include $compiledFilePath;
-        } catch (Exception $e) {
-            // Handle the exception (log it, display an error message, etc.)
-            echo 'Error rendering view: ' . $e->getMessage();
+            $viewContent = $this->compile($view);
+            eval('?>' . $viewContent);
+        } catch (VoltException $e) {
+            throw new VoltException('Error rendering view: ' . $e->getMessage());
         }
     }
 
-    // ... (previous class code)
-
-    protected function isCacheValid(string $compiledFilePath): bool
+    protected function compile($view)
     {
-        try {
-            return $this->environment['cache'] && !$this->isExpired($compiledFilePath);
-        } catch (Exception $e) {
-            // Handle the exception (log it, display an error message, etc.)
-            throw new Exception('Error checking cache validity: ' . $e->getMessage());
-        }
-    }
+        $viewContent = file_get_contents($this->viewPath . '/' . $view . '.volt');
+        $viewContent = $this->compileExtends($viewContent);
+        $viewContent = $this->compileBlocks($viewContent);
 
-    // ... (previous class code)
+        // Perform your custom compilation here
+        $compiledContent = $this->compileSyntax($viewContent);
+
+        return $compiledContent;
+    }
 
     protected function compileSyntax(string $viewContent): string
     {
@@ -57,12 +58,53 @@ class VoltTemplate
             }, $viewContent);
 
             return $compiledContent;
-        } catch (Exception $e) {
-            throw new Exception('Error during syntax compilation: ' . $e->getMessage());
+        } catch (VoltException $e) {
+            throw new VoltException('Error during syntax compilation: ' . $e->getMessage());
         }
     }
 
-    // ... (previous class code)
+    protected function compileFunction($function)
+    {
+        // Handle the function syntax
+        $tokens = token_get_all('<?php ' . $function);
+        $compiled = '';
+
+        foreach ($tokens as $token) {
+            if (is_array($token)) {
+                list($id, $text) = $token;
+
+                switch ($id) {
+                    case T_VARIABLE:
+                    case T_STRING:
+                        $compiled .= $text;
+                        break;
+                    case T_WHITESPACE:
+                        $compiled .= ' ';
+                        break;
+                    default:
+                        $compiled .= $text;
+                }
+            } else {
+                $compiled .= $token;
+            }
+        }
+
+        return $compiled;
+    }
+
+    protected function compileExtends(string $viewContent): string
+    {
+        return preg_replace_callback('/' . preg_quote(self::EXTENDS_PREFIX, '/') . '\(\'(.*?)\'\)/', function ($matches) {
+            return '<?php $this->extend(\'' . $matches[1] . '\'); ?>';
+        }, $viewContent);
+    }
+
+    protected function compileBlocks(string $viewContent): string
+    {
+        return preg_replace_callback('/' . preg_quote(self::SECTION_PREFIX, '/') . '\(\'(.*?)\'\)/', function ($matches) {
+            return '<?php $this->startSection(\'' . $matches[1] . '\'); ?>';
+        }, $viewContent);
+    }
 
     protected function extend(string $view)
     {
@@ -70,29 +112,32 @@ class VoltTemplate
             $parentContent = file_get_contents($this->viewPath . '/' . $view . '.volt');
 
             if ($parentContent === false) {
-                throw new Exception('Error including parent view: Unable to read parent view file');
+                throw new VoltException('Error including parent view: Unable to read parent view file');
             }
 
             $this->data['__parent'] = $parentContent;
-        } catch (Exception $e) {
-            throw new Exception('Error extending view: ' . $e->getMessage());
+        } catch (VoltException $e) {
+            throw new VoltException('Error extending view: ' . $e->getMessage());
         }
     }
 
-    // ... (previous class code)
-
-    protected function putCompiledContent(string $compiledFilePath, string $compiledContent)
+    protected function startSection($section)
     {
-        try {
-            $result = file_put_contents($compiledFilePath, $compiledContent);
-
-            if ($result === false) {
-                throw new Exception('Error writing compiled content to file');
-            }
-        } catch (Exception $e) {
-            throw new Exception('Error putting compiled content: ' . $e->getMessage());
-        }
+        ob_start();
     }
 
-    // ... (previous class code)
+    protected function endSection($section)
+    {
+        $this->data['__sections'][$section] = ob_get_clean();
+    }
+
+    protected function escape($value)
+    {
+        return $this->environment['autoescape'] ? htmlspecialchars($value, ENT_QUOTES, 'UTF-8') : $value;
+    }
+
+    public function registerFunction($name, $callback)
+    {
+        $this->environment['functions'][$name] = $callback;
+    }
 }

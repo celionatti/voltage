@@ -30,6 +30,7 @@ class SiteController extends Controller
             'title' => '<strong>Hello, World!</strong>', // Will be escaped if autoescape is true
             'content' => 'This is a more advanced view template engine using .volt syntax.',
             'amount' => 12345.67,
+            'name' => 'celio natti',
         ];
         
         $this->view->render("welcome", $data);
