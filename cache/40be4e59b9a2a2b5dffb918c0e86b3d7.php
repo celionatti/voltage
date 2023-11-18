@@ -1,7 +1,1 @@
-<h1>Hello <?php echo htmlspecialchars( $name , ENT_QUOTES, 'UTF-8'); ?></h1>
-
-<?php if(2==2): ?>
-<h2>Inside the conditions</h2>
-<?php endif; ?>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, iusto.</p>
+<h2>Hello from the welcome volt</h2>

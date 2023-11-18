@@ -65,6 +65,67 @@ function doFilter($hook, $value, $args = array())
     return $value;
 }
 
+function addEventListener($event, $callback, $priority = 10)
+{
+    global $events;
+
+    if (!isset($events[$event])) {
+        $events[$event] = array();
+    }
+
+    $events[$event][] = array(
+        'callback' => $callback,
+        'priority' => $priority
+    );
+}
+
+function fireEvent($event, $args = array())
+{
+    global $events;
+
+    if (isset($events[$event])) {
+        // Sort events by priority
+        usort($events[$event], function ($a, $b) {
+            return $a['priority'] - $b['priority'];
+        });
+
+        foreach ($events[$event] as $eventListener) {
+            call_user_func_array($eventListener['callback'], $args);
+        }
+    }
+}
+
+function initializeHooks()
+{
+    // Initialize default hooks or predefined actions/filters
+    addDefaultHooks();
+}
+
+function addDefaultHooks()
+{
+    // Example: Adding a default action and filter
+    addAction('volt_default_action', function () {
+        echo 'This is a default action!';
+    });
+
+    addFilter('volt_default_filter', function ($data) {
+        return $data . ' Modified by the default filter.';
+    });
+}
+
+function checkHooks()
+{
+    global $actions, $filters;
+    // Check if essential hooks are registered
+    $requiredHooks = array('volt_default_action', 'volt_default_filter');
+
+    foreach ($requiredHooks as $hook) {
+        if (!isset($actions[$hook]) && !isset($filters[$hook]) && !isset($events[$hook])) {
+            throw new VoltException("Required hook '$hook' is missing in checkHooks function.");
+        }
+    }
+}
+
 function getPackageFolders($packages_folder = 'packages/', $filter = null, $includeInfo = false, $requiredSubfolders = [])
 {
     $result = [];
@@ -175,14 +236,6 @@ function loadPackages($packages_folder = 'packages/', $filter = null, $includeIn
                     }
                 }
 
-                // Require the plugin.php file
-                $pluginFilePath = $package['path'] . DIRECTORY_SEPARATOR . 'plugin.php';
-                if (file_exists($pluginFilePath)) {
-                    require_once $pluginFilePath;
-                } else {
-                    throw new VoltException("Error: Plugin file 'plugin.php' not found in package '{$package['name']}'");
-                }
-
                 // Add the loaded package to the result array with named keys
                 $uniqueId = uniqid('package_');
                 $loadedPackages[$uniqueId] = [
@@ -205,6 +258,16 @@ function loadPackages($packages_folder = 'packages/', $filter = null, $includeIn
     usort($loadedPackages, function ($a, $b) {
         return $a['install_data']['index'] <=> $b['install_data']['index'];
     });
+
+    // Include required plugin files in the sorted order
+    foreach ($loadedPackages as $loadedPackage) {
+        $pluginFilePath = $loadedPackage['package_info']['path'] . DIRECTORY_SEPARATOR . 'plugin.php';
+        if (file_exists($pluginFilePath)) {
+            require_once $pluginFilePath;
+        } else {
+            throw new VoltException("Error: Plugin file 'plugin.php' not found in package '{$loadedPackage['package_info']['name']}'");
+        }
+    }
 
     return $loadedPackages;
 }
@@ -241,4 +304,101 @@ function getPackageSubfolders($packagePath)
     }
 
     return $result;
+}
+
+/**
+ * Get Commented Info from File
+ *
+ * @param string $file_path The path to the file.
+ * @return array An array of commented lines.
+ */
+function commentedInfo($file_path)
+{
+    $commented_lines = array();
+    $inside_comment_block = false;
+
+    // Open the file for reading
+    $file_handle = fopen($file_path, 'r');
+
+    if ($file_handle) {
+        // Read the file line by line
+        while (($line = fgets($file_handle)) !== false) {
+            $trimmed_line = trim($line);
+
+            // Check if the line starts a comment block (/**)
+            if (strpos($trimmed_line, '/**') === 0) {
+                $inside_comment_block = true;
+                $commented_lines[] = $trimmed_line;
+            }
+
+            // Check if the line is inside a comment block
+            if ($inside_comment_block) {
+                $commented_lines[] = $trimmed_line;
+            }
+
+            // Check if the line ends a comment block (*/)
+            if (strpos($trimmed_line, '*/') !== false) {
+                $inside_comment_block = false;
+            }
+        }
+
+        // Close the file handle
+        fclose($file_handle);
+    }
+
+    return $commented_lines;
+}
+
+/**
+ * Get Plugin Commented Lines from File
+ *
+ * @param string $file_path The path to the file.
+ * @return stdClass An object with properties based on the commented lines.
+ */
+function getPluginInfo($file_path)
+{
+    $commented_data = new stdClass();
+    ;
+    $inside_comment_block = false;
+
+    // Open the file for reading
+    $file_handle = fopen($file_path, 'r');
+
+    if ($file_handle) {
+        // Read the file line by line
+        while (($line = fgets($file_handle)) !== false) {
+            $trimmed_line = trim($line);
+
+            // Check if the line starts a comment block (/**)
+            if (strpos($trimmed_line, '/**') === 0) {
+                $inside_comment_block = true;
+            }
+
+            // Check if the line is inside a comment block
+            if ($inside_comment_block) {
+                // Check if the line ends a comment block (*/)
+                if (strpos($trimmed_line, '*/') !== false) {
+                    $inside_comment_block = false;
+                } else {
+                    // Split the line into key and value based on ":"
+                    $parts = explode(':', $trimmed_line, 2);
+
+                    // Check if the exploded array has at least two elements
+                    if (count($parts) === 2) {
+                        // Remove leading asterisks and trim
+                        $key = trim(str_replace('*', '', $parts[0]));
+                        $value = trim($parts[1]);
+
+                        // Set the property in the commented_data object
+                        $commented_data->{$key} = $value;
+                    }
+                }
+            }
+        }
+
+        // Close the file handle
+        fclose($file_handle);
+    }
+
+    return $commented_data;
 }

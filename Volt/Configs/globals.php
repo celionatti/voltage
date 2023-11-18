@@ -14,5 +14,7 @@ $actions = array();
 
 $filters = array();
 
+$events = array();
+
 const TEMPLATE_DIR = "templates";
 const CACHE_DIR = "cache";

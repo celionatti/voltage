@@ -30,6 +30,8 @@ class VoltTemplate
 
     private $extension;
 
+    private $layout = 'default'; // Default layout
+
     protected $registeredFunctions = [];
 
     public function __construct(string $viewPath, string $cachePath, array $environment = [])
@@ -75,6 +77,16 @@ class VoltTemplate
         }
     }
 
+    public function setLayout(string $layout)
+    {
+        $this->layout = $layout;
+    }
+
+    public function getLayout(): string
+    {
+        return $this->layout;
+    }
+    
     public function render(string $view, array $data = [])
     {
         try {
@@ -85,7 +97,18 @@ class VoltTemplate
                 $this->compileTemplate($view);
             }
 
-            $this->includeTemplate($view);
+            // Load the layout template dynamically
+            $layoutContent = file_get_contents($this->viewPath . 'layouts/' . $this->getLayout() . '.volt');
+
+            // Replace the content placeholder with the actual view content
+            $layoutContent = str_replace('@yield(\'content\')', '<?php $this->includeTemplate(\'' . $view . '\'); ?>', $layoutContent);
+
+            // Save the layout content to a temporary file
+            $layoutCache = $this->getCacheFilename('layout_' . $this->getLayout());
+            file_put_contents($layoutCache, $layoutContent);
+
+            // Include the temporary layout file
+            $this->includeTemplate('layout_' . $this->getLayout());
         } catch (VoltException $e) {
             throw new VoltException('Error rendering view: ' . $e->getMessage());
         }
@@ -115,19 +138,6 @@ class VoltTemplate
         $content = preg_replace_callback('/@method\(\$*(.*?)\$*\)/', function ($matches) {
             return '<?php echo $this->' . $matches[1] . '(); ?>';
         }, $content);
-
-        // Handle @extends
-        if (preg_match('/@extends\(\$*(.*?)\$*\)/', $content, $matches)) {
-            $this->extend($matches[1]);
-        }
-
-        // Handle @section and @show
-        $content = preg_replace_callback('/@section\(\$*(.*?)\$*\)/', function ($matches) {
-            $this->startSection($matches[1]);
-            return '';
-        }, $content);
-
-        $content = str_replace('@show', '<?php $this->showSection(', $content);
 
         // Handle function calls
         $content = preg_replace_callback('/@function\(\$*(.*?)\$*\)/', function ($matches) {
@@ -162,28 +172,6 @@ class VoltTemplate
 
         // Check if the cache file exists and is not older than the source file
         return file_exists($cache) && filemtime($cache) >= filemtime($this->viewPath . $view . $this->extension);
-    }
-
-    public function extend(string $parentView)
-    {
-        $this->compileTemplate($parentView);
-    }
-
-    // Handle @section and @show
-    protected $sections = [];
-
-    public function startSection(string $sectionName)
-    {
-        ob_start();
-        $this->sections[$sectionName] = ob_get_contents();
-        ob_end_clean();
-    }
-
-    public function showSection(string $sectionName)
-    {
-        if (isset($this->sections[$sectionName])) {
-            echo $this->sections[$sectionName];
-        }
     }
 
     // Example method definition

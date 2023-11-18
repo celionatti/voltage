@@ -41,6 +41,7 @@ class Controller
         $this->view = new VoltTemplate($viewDir, $cacheDir, [
             'autoescape' => true,
         ]);
+        $this->view->setLayout("main");
         $this->onConstruct();
     }
 
