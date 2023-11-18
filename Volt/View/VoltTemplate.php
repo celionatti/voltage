@@ -28,16 +28,18 @@ class VoltTemplate
     protected $cachePath;
     protected $environment;
 
+    private $extension;
+
     protected $registeredFunctions = [];
 
     public function __construct(string $viewPath, string $cachePath, array $environment = [])
     {
         $this->viewPath = $viewPath;
         $this->cachePath = $cachePath;
+        $this->extension = ".volt";
 
         $predefinedKeys = [
             'debug',
-            'autoescape',
             'functions',
         ];
 
@@ -91,7 +93,7 @@ class VoltTemplate
 
     protected function compileTemplate(string $view)
     {
-        $content = file_get_contents($this->viewPath . $view . '.php');
+        $content = file_get_contents($this->viewPath . $view . $this->extension);
         $content = preg_replace('/{{\$*(.+?)\$*}}/', $this->environment['autoescape'] ? '<?php echo htmlspecialchars($1, ENT_QUOTES, \'UTF-8\'); ?>' : '<?php echo $1; ?>', $content);
 
 
@@ -159,7 +161,7 @@ class VoltTemplate
         $cache = $this->getCacheFilename($view);
 
         // Check if the cache file exists and is not older than the source file
-        return file_exists($cache) && filemtime($cache) >= filemtime($this->viewPath . $view . '.php');
+        return file_exists($cache) && filemtime($cache) >= filemtime($this->viewPath . $view . $this->extension);
     }
 
     public function extend(string $parentView)
