@@ -21,7 +21,7 @@ use celionatti\Voltage\Exceptions\VoltException;
  * ==============================================
  */
 
-class VoltTemplate
+class progress
 {
     protected $data = [];
     protected $viewPath;
