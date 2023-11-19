@@ -21,7 +21,7 @@ use celionatti\Voltage\Exceptions\VoltException;
  * ==============================================
  */
 
-class VoltTemplate
+class view
 {
     protected $data = [];
     protected $viewPath;
@@ -31,7 +31,6 @@ class VoltTemplate
     private $extension;
 
     private $layout = 'default'; // Default layout
-    private $title = 'Voltage | Home'; // Default layout
 
     protected $registeredFunctions = [];
 
@@ -87,7 +86,7 @@ class VoltTemplate
     {
         return $this->layout;
     }
-
+    
     public function render(string $view, array $data = [])
     {
         try {
@@ -102,12 +101,6 @@ class VoltTemplate
             $layoutContent = file_get_contents($this->viewPath . 'layouts/' . $this->getLayout() . '.volt');
 
             // Replace the content placeholder with the actual view content
-            $layoutContent = str_replace(
-                '@yield(\'title\')',
-                $this->yieldTitle(),
-                $layoutContent
-            );
-
             $layoutContent = str_replace('@yield(\'content\')', '<?php $this->includeTemplate(\'' . $view . '\'); ?>', $layoutContent);
 
             // Save the layout content to a temporary file
@@ -204,20 +197,5 @@ class VoltTemplate
     public function registerFunctions(array $functions)
     {
         $this->registeredFunctions = array_merge($this->registeredFunctions, $functions);
-    }
-
-    public function setTitle(string $title)
-    {
-        $this->title = $title;
-    }
-
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    public function yieldTitle(): string
-    {
-        return '<?php echo $this->getTitle(); ?>';
     }
 }

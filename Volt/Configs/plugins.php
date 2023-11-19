@@ -135,6 +135,10 @@ function getPackageFolders($packages_folder = 'packages/', $filter = null, $incl
 
     $folders = scandir(rootDir() . DIRECTORY_SEPARATOR . $packages_folder);
 
+    if(!$folders) {
+        throw new VoltException("Folders Not Found");
+    }
+
     foreach ($folders as $folder) {
         $folderPath = rootDir() . DIRECTORY_SEPARATOR . $packages_folder . $folder;
 
@@ -401,4 +405,35 @@ function getPluginInfo($file_path)
     }
 
     return $commented_data;
+}
+
+function getPackageId($package_id, $packages_folder = 'packages/')
+{
+    $packages = getPackageFolders($packages_folder);
+
+    foreach ($packages as $package) {
+        $installJsonPath = $package['path'] . DIRECTORY_SEPARATOR . 'install.json';
+
+        // Check if install.json exists for the package
+        if (file_exists($installJsonPath)) {
+            // Read and decode install.json
+            $installJsonContent = file_get_contents($installJsonPath);
+            $installData = json_decode($installJsonContent, true);
+
+            // Check if JSON decoding was successful
+            if (json_last_error() === JSON_ERROR_NONE) {
+                // Check if the ID matches the desired package ID
+                if (isset($installData['id']) && $installData['id'] === $package_id) {
+                    return $installData['id'];
+                }
+            } else {
+                // Handle JSON decoding error
+                // You might want to log an error or handle it in a way suitable for your application
+                throw new VoltException("Error decoding install.json for package '{$package['name']}': " . json_last_error_msg());
+            }
+        }
+    }
+
+    // If the package with the specified ID is not found
+    return null;
 }

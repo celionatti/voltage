@@ -22,3 +22,8 @@
 [2023-11-17 12:11:57] [ERROR] Error writing compiled content to file
 [2023-11-18 01:37:55] [ERROR] The key 'debug' cannot be overridden in the environment array.
 [2023-11-18 01:48:26] [ERROR] The key 'autoescape' cannot be overridden in the environment array.
+[2023-11-18 22:55:35] [ERROR] Template file not found: C:\xampp\htdocs\voltage\cache\e6748717429f3c8ce19fe7dec00a4b1f.php
+[2023-11-18 22:56:27] [ERROR] Template file not found: C:\xampp\htdocs\voltage\cache\\ed1536d03c628dae48acc1da030d588f.php
+[2023-11-18 22:56:57] [ERROR] Template file not found: C:\xampp\htdocs\voltage\cache\e6748717429f3c8ce19fe7dec00a4b1f.php
+[2023-11-18 22:57:03] [ERROR] Template file not found: C:\xampp\htdocs\voltage\cache\e6748717429f3c8ce19fe7dec00a4b1f.php
+[2023-11-19 05:00:58] [ERROR] Folders Not Found

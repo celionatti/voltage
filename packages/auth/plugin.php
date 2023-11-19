@@ -11,3 +11,4 @@ declare(strict_types=1);
  * License: GPL2
  */
 
+dd(getPackageId('auth'));
