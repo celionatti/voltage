@@ -37,3 +37,6 @@
 [2023-11-19 23:07:56] [ERROR] Error: Missing required subfolder(s) in package 'admin': assets, resources
 [2023-11-19 23:07:59] [ERROR] Error: Missing required subfolder(s) in package 'admin': assets, resources
 [2023-11-19 23:09:00] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found
+[2023-11-19 23:40:35] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found
+[2023-11-19 23:41:30] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found
+[2023-11-19 23:56:11] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found

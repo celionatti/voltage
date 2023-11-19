@@ -9,9 +9,9 @@ declare(strict_types=1);
  * Year: 2023
  */
 
-namespace celionatti\Voltage\packages\auth\controllers;
+namespace celionatti\Packages\auth\resources\controllers;
 
-use celionatti\Voltage\Controller;
+use celionatti\Voltage\PackageController;
 
 
 /**
@@ -22,7 +22,7 @@ use celionatti\Voltage\Controller;
  * ==============================================
  */
 
-class VoltAuthController extends Controller
+class VoltAuthController extends PackageController
 {
     public function login()
     {

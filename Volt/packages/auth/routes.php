@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-
 use celionatti\Voltage\Voltage;
-use Voltage\app\controllers\SiteController;
+use celionatti\Packages\auth\resources\controllers\VoltAuthController;
 
 /**
  * Library Name: Voltage
@@ -15,4 +14,4 @@ use Voltage\app\controllers\SiteController;
 
  /** @var Voltage $voltage */
 
-$voltage->router->get("/auth", [SiteController::class,"index"]);
+$voltage->router->get("/auth", [VoltAuthController::class,"login"]);
