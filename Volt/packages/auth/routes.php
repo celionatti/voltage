@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 
 use celionatti\Voltage\Voltage;
+use Voltage\app\controllers\SiteController;
 
 /**
  * Library Name: Voltage
@@ -14,6 +15,4 @@ use celionatti\Voltage\Voltage;
 
  /** @var Voltage $voltage */
 
-$voltage->router->get("/auth", function () {
-    echo "Auth Package - Hello World";
-});
+$voltage->router->get("/auth", [SiteController::class,"index"]);

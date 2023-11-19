@@ -133,14 +133,14 @@ function getPackageFolders($packages_folder = 'packages/', $filter = null, $incl
     // Ensure the packages folder path ends with a directory separator
     $packages_folder = rtrim($packages_folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
-    $folders = scandir(rootDir() . DIRECTORY_SEPARATOR . $packages_folder);
+    $folders = scandir(dirname(__DIR__) . DIRECTORY_SEPARATOR . $packages_folder);
 
     if (!$folders) {
         throw new VoltException("Folders Not Found");
     }
 
     foreach ($folders as $folder) {
-        $folderPath = rootDir() . DIRECTORY_SEPARATOR . $packages_folder . $folder;
+        $folderPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . $packages_folder . $folder;
 
         if ($folder != '.' && $folder != '..' && is_dir($folderPath)) {
             // Check if the package meets the filtering criteria
@@ -407,7 +407,7 @@ function getPluginInfo($file_path)
     return $commented_data;
 }
 
-function getPackageId($package_id, $packages_folder = 'packages/')
+function getPackageId($package_name, $packages_folder = 'packages/')
 {
     $packages = getPackageFolders($packages_folder);
 
@@ -422,8 +422,13 @@ function getPackageId($package_id, $packages_folder = 'packages/')
 
             // Check if JSON decoding was successful
             if (json_last_error() === JSON_ERROR_NONE) {
+                // Check for the 'active' property
+                if (isset($installData['active']) && $installData['active'] !== true) {
+                    continue; // Skip inactive packages
+                }
+
                 // Check if the ID matches the desired package ID
-                if (isset($installData['id']) && $installData['id'] === $package_id) {
+                if (isset($installData['name']) && $installData['name'] === $package_name) {
                     return $installData['id'];
                 }
             } else {

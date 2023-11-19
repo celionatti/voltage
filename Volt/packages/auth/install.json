@@ -1,6 +1,6 @@
 {
     "name": "auth",
-    "id":"auth",
+    "id":"volt-auth",
     "index":1,
     "active": true,
     "page": ["*"],

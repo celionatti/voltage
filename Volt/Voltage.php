@@ -79,7 +79,7 @@ class Voltage
         loadPackages('packages/', function ($packagePath) {
             // Custom filter: Include only packages containing a specific file
             return file_exists($packagePath . DIRECTORY_SEPARATOR . 'install.json');
-        }, true, ['styles', 'scripts', 'images']);
+        }, true, ['assets', 'resources']);
     }
 
     /**
@@ -88,8 +88,8 @@ class Voltage
     public function run(): void
     {
         try {
-            $this->router->resolve();
             $this->loadPackages();
+            $this->router->resolve();
         } catch (VoltException $e) {
             // Handle VoltException
             // Log or rethrow if necessary

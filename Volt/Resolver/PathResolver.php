@@ -70,7 +70,7 @@ class PathResolver
 
     public function packageRouterPath(): ?array
     {
-        $packagesDir = $this->basePath . DIRECTORY_SEPARATOR . 'packages';
+        $packagesDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'packages';
         $packages = glob($packagesDir . '/*', GLOB_ONLYDIR);
         $routes = [];
 

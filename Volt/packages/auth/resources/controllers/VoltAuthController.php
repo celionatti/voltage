@@ -9,7 +9,7 @@ declare(strict_types=1);
  * Year: 2023
  */
 
-namespace Voltage\app\controllers;
+namespace celionatti\Voltage\packages\auth\controllers;
 
 use celionatti\Voltage\Controller;
 
@@ -22,9 +22,9 @@ use celionatti\Voltage\Controller;
  * ==============================================
  */
 
-class SiteController extends Controller
+class VoltAuthController extends Controller
 {
-    public function index()
+    public function login()
     {
         $data = [
             'title' => '<strong>Hello, World!</strong>', // Will be escaped if autoescape is true
@@ -36,7 +36,7 @@ class SiteController extends Controller
         $this->view->render("welcome", $data);
     }
 
-    public function login()
+    public function register()
     {
         dump("Login Package File Route", false);
     }

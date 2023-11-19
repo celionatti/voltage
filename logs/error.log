@@ -27,3 +27,13 @@
 [2023-11-18 22:56:57] [ERROR] Template file not found: C:\xampp\htdocs\voltage\cache\e6748717429f3c8ce19fe7dec00a4b1f.php
 [2023-11-18 22:57:03] [ERROR] Template file not found: C:\xampp\htdocs\voltage\cache\e6748717429f3c8ce19fe7dec00a4b1f.php
 [2023-11-19 05:00:58] [ERROR] Folders Not Found
+[2023-11-19 21:37:07] [ERROR] Folders Not Found
+[2023-11-19 21:43:14] [ERROR] Folders Not Found
+[2023-11-19 21:56:25] [ERROR] Not Active package 'admin': No error
+[2023-11-19 22:58:20] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found
+[2023-11-19 23:01:33] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found
+[2023-11-19 23:02:24] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found
+[2023-11-19 23:04:33] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found
+[2023-11-19 23:07:56] [ERROR] Error: Missing required subfolder(s) in package 'admin': assets, resources
+[2023-11-19 23:07:59] [ERROR] Error: Missing required subfolder(s) in package 'admin': assets, resources
+[2023-11-19 23:09:00] [INFO] Callback - [ Method: GET, Path: /favicon.ico ] - Not Found

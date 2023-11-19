@@ -12,6 +12,4 @@ declare(strict_types=1);
  */
 
 
-$args = array('celio', 'natti');
-doAction('before-view', $args);
-doAction('after-view', $args);
+ echo "Auth Echo here";

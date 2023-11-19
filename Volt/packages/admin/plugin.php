@@ -10,4 +10,3 @@ declare(strict_types=1);
  * Author URI: www.nattination.com.ng
  * License: GPL2
  */
-
