@@ -44,15 +44,15 @@ class Voltage
         $this->initializeComponents();
         self::$voltage = $this;
         $this->loadConfiguration();
-        $this->loadPackages();
     }
 
     private function require_files()
     {
         return [
             require __DIR__ . "/Configs/functions.php",
-            require __DIR__ . "/Configs/plugins.php",
             require __DIR__ . "/Configs/globals.php",
+            require __DIR__ . "/Configs/plugins.php",
+            require __DIR__ . "/Configs/plugin-functions.php",
             require rootDir() . "/configs/load.php",
         ];
     }
@@ -89,6 +89,7 @@ class Voltage
     {
         try {
             $this->router->resolve();
+            $this->loadPackages();
         } catch (VoltException $e) {
             // Handle VoltException
             // Log or rethrow if necessary

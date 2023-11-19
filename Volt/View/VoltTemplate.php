@@ -93,6 +93,8 @@ class VoltTemplate
         try {
             $this->data = array_merge($this->data, $data);
 
+            addAction('before-view', 'voltPreview');
+
             // Check if template caching is enabled
             if ($this->environment['debug'] || !$this->isCacheValid($view)) {
                 $this->compileTemplate($view);
@@ -116,6 +118,8 @@ class VoltTemplate
 
             // Include the temporary layout file
             $this->includeTemplate('layout_' . $this->getLayout());
+
+            addAction('after-view', 'voltPostview');
         } catch (VoltException $e) {
             throw new VoltException('Error rendering view: ' . $e->getMessage());
         }

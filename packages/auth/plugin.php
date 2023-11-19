@@ -11,4 +11,7 @@ declare(strict_types=1);
  * License: GPL2
  */
 
-dd(getPackageId('auth'));
+
+$args = array('celio', 'natti');
+doAction('before-view', $args);
+doAction('after-view', $args);

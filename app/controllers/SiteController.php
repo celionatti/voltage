@@ -32,7 +32,7 @@ class SiteController extends Controller
             'amount' => 12345.67,
             'name' => 'celio natti',
         ];
-        
+
         $this->view->render("welcome", $data);
     }
 }

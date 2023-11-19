@@ -13,9 +13,9 @@ use celionatti\Voltage\Exceptions\VoltException;
 
 function addAction($hook, $callback, $priority = 10)
 {
-    global $actions;
+    global $volt_actions;
 
-    $actions[$hook][] = array(
+    $volt_actions[$hook][] = array(
         'callback' => $callback,
         'priority' => $priority
     );
@@ -23,15 +23,15 @@ function addAction($hook, $callback, $priority = 10)
 
 function doAction($hook, $args = array())
 {
-    global $actions;
+    global $volt_actions;
 
-    if (isset($actions[$hook])) {
+    if (isset($volt_actions[$hook])) {
         // Sort actions by priority
-        usort($actions[$hook], function ($a, $b) {
+        usort($volt_actions[$hook], function ($a, $b) {
             return $a['priority'] - $b['priority'];
         });
 
-        foreach ($actions[$hook] as $action) {
+        foreach ($volt_actions[$hook] as $action) {
             call_user_func_array($action['callback'], $args);
         }
     }
@@ -135,7 +135,7 @@ function getPackageFolders($packages_folder = 'packages/', $filter = null, $incl
 
     $folders = scandir(rootDir() . DIRECTORY_SEPARATOR . $packages_folder);
 
-    if(!$folders) {
+    if (!$folders) {
         throw new VoltException("Folders Not Found");
     }
 

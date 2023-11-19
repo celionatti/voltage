@@ -36,13 +36,13 @@ class Controller
 
     public function __construct()
     {
+        $this->onConstruct();
         $viewDir = rootDir() . DIRECTORY_SEPARATOR . TEMPLATE_DIR . DIRECTORY_SEPARATOR;
         $cacheDir = rootDir() . DIRECTORY_SEPARATOR . CACHE_DIR . DIRECTORY_SEPARATOR;
         $this->view = new VoltTemplate($viewDir, $cacheDir, [
             'autoescape' => true,
         ]);
         $this->view->setLayout("main");
-        $this->onConstruct();
     }
 
     public function setCurrentUser($user)

@@ -191,6 +191,7 @@ class Router
                 throw new VoltException("Callback - [ Method: {$method}, Path: {$url} ] - Not Found", 404, 'info');
             }
         }
+        
         if (is_string($callback)) {
             // Split the string based on the "@" symbol
             $callbackParts = explode('@', $callback);

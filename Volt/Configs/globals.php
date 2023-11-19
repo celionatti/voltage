@@ -10,11 +10,11 @@ declare(strict_types=1);
  */
 
 
-$actions = array();
+$volt_actions = [];
 
-$filters = array();
+$volt_filters = [];
 
-$events = array();
+$volt_events = [];
 
 const TEMPLATE_DIR = "templates";
 const CACHE_DIR = "cache";
