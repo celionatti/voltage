@@ -225,7 +225,7 @@ class Router
         }
         if (is_array($callback)) {
             /**
-             * @var $controller \celionatti\Voltage\Controller
+             * @var $controller
              */
             $controller = new $callback[0];
             $controller->action = $callback[1];

@@ -103,4 +103,11 @@ class PathResolver
         $path = ltrim($path, '/'); // Remove leading slashes from the path
         return $templatePath . DIRECTORY_SEPARATOR . $path;
     }
+
+    public function packageTemplatePath($path = ''): string
+    {
+        $templatePath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . 'templates';
+        $path = ltrim($path, '/'); // Remove leading slashes from the path
+        return $templatePath . DIRECTORY_SEPARATOR . $path;
+    }
 }

@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use celionatti\Voltage\Voltage;
+use celionatti\Voltage\View\VoltTemplate;
+
 /**
  * Library Name: Voltage
  * Author: Celio Natti
@@ -224,5 +227,32 @@ function dump($value, $die = true)
     if ($die) {
         die;
     }
+}
+
+function getAssetsDirectory($directory): string
+{
+    return Voltage::$voltage->assetResolver->getAssetPath("assets" . $directory);
+}
+
+function getPackageAssets(string $package): string
+{
+    return getAssetsDirectory(DIRECTORY_SEPARATOR . "packages" . DIRECTORY_SEPARATOR . $package);
+}
+
+function get_stylesheet(string $path): string
+{
+    return getAssetsDirectory(DIRECTORY_SEPARATOR . "css" . DIRECTORY_SEPARATOR . $path);
+}
+
+function get_script($path): string
+{
+    return getAssetsDirectory(DIRECTORY_SEPARATOR . "js" . DIRECTORY_SEPARATOR . $path);
+}
+
+function partials(string $path, $params = [])
+{
+    // $view = new VoltTemplate();
+
+    // $view->partial($path, $params);
 }
 

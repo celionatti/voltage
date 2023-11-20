@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use celionatti\Voltage\Voltage;
-use Voltage\app\controllers\SiteController;
+use celionatti\Packages\volt\controllers\VoltController;
 
 /**
  * Library Name: Voltage
@@ -14,4 +14,4 @@ use Voltage\app\controllers\SiteController;
 
  /** @var Voltage $voltage */
 
-$voltage->router->get("/home", [SiteController::class,"index"]);
+$voltage->router->get("/", [VoltController::class,"volt"]);

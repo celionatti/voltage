@@ -29,7 +29,7 @@ use celionatti\Voltage\Exceptions\VoltException;
 class Voltage
 {
     public Config $config;
-    public ?Controller $controller;
+    public $controller;
     public VoltExtension $extension;
     public static Voltage $voltage;
     public PathResolver $pathResolver;
@@ -79,7 +79,7 @@ class Voltage
         loadPackages('packages/', function ($packagePath) {
             // Custom filter: Include only packages containing a specific file
             return file_exists($packagePath . DIRECTORY_SEPARATOR . 'install.json');
-        }, true, ['assets', 'resources']);
+        }, true, ['controllers']);
     }
 
     /**

@@ -37,13 +37,12 @@ class PackageController
     public function __construct()
     {
         $this->onConstruct();
-        $viewDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . TEMPLATE_DIR . DIRECTORY_SEPARATOR;
-        $cacheDir = rootDir() . DIRECTORY_SEPARATOR . CACHE_DIR . DIRECTORY_SEPARATOR;
-        dump($viewDir);
+        $viewDir = __DIR__ . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . TEMPLATE_DIR . DIRECTORY_SEPARATOR;
+        $cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR . CACHE_DIR . DIRECTORY_SEPARATOR;
         $this->view = new VoltTemplate($viewDir, $cacheDir, [
             'autoescape' => true,
         ]);
-        $this->view->setLayout("main");
+        $this->view->setLayout("package");
     }
 
     public function setCurrentUser($user)

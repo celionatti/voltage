@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 /**
- * Package Name: Volt Authentication
- * Description: Volt Authentication for basic login, signup, forgot password and recover password.
+ * Package Name: Volt Main Plugin
+ * Description: Volt Main Plugin.
  * Version: 1.0.0
  * Author: Celio Natti
  * Author URI: www.nattination.com.ng

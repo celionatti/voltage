@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace celionatti\Voltage\View;
 
+use celionatti\Voltage\Voltage;
 use celionatti\Voltage\Exceptions\VoltException;
 
 /**
@@ -180,6 +181,24 @@ class VoltTemplate
 
         // Check if the cache file exists and is not older than the source file
         return file_exists($cache) && filemtime($cache) >= filemtime($this->viewPath . $view . '.php');
+    }
+
+    public function partial($path, $params = []): void
+    {
+        $fullPath = Voltage::$voltage->pathResolver->templatePath(DIRECTORY_SEPARATOR . 'partials' . DIRECTORY_SEPARATOR . $path . '.php');
+        if (file_exists($fullPath)) {
+            extract($params);
+            include($fullPath);
+        }
+    }
+
+    public function packagePartial($path, $params = []): void
+    {
+        $fullPath = Voltage::$voltage->pathResolver->packageTemplatePath(DIRECTORY_SEPARATOR . 'partials' . DIRECTORY_SEPARATOR . $path . '.php');
+        if (file_exists($fullPath)) {
+            extract($params);
+            include($fullPath);
+        }
     }
 
     // Example method definition

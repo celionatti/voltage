@@ -9,7 +9,7 @@ declare(strict_types=1);
  * Year: 2023
  */
 
-namespace celionatti\Packages\auth\resources\controllers;
+namespace celionatti\Packages\auth\controllers;
 
 use celionatti\Voltage\PackageController;
 
@@ -27,13 +27,10 @@ class VoltAuthController extends PackageController
     public function login()
     {
         $data = [
-            'title' => '<strong>Hello, World!</strong>', // Will be escaped if autoescape is true
-            'content' => 'This is a more advanced view template engine using .volt syntax.',
-            'amount' => 12345.67,
             'name' => 'celio natti',
         ];
 
-        $this->view->render("welcome", $data);
+        $this->view->render("auth/login", $data);
     }
 
     public function register()
