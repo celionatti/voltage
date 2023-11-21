@@ -239,20 +239,123 @@ function getPackageAssets(string $package): string
     return getAssetsDirectory(DIRECTORY_SEPARATOR . "packages" . DIRECTORY_SEPARATOR . $package);
 }
 
-function get_stylesheet(string $path): string
+function getStylesheet(string $path): string
 {
     return getAssetsDirectory(DIRECTORY_SEPARATOR . "css" . DIRECTORY_SEPARATOR . $path);
 }
 
-function get_script($path): string
+function getScript($path): string
 {
     return getAssetsDirectory(DIRECTORY_SEPARATOR . "js" . DIRECTORY_SEPARATOR . $path);
 }
 
-function partials(string $path, $params = [])
+function partial(string $path, $params = [])
 {
-    // $view = new VoltTemplate();
-
-    // $view->partial($path, $params);
+    VoltTemplate::partial($path, $params);
 }
 
+function packagePartial(string $path, $params = [])
+{
+    VoltTemplate::packagePartial($path, $params);
+}
+
+function sanitizeData($data)
+{
+    if (is_array($data)) {
+        return array_map('sanitizeData', $data);
+    } else {
+        return htmlspecialchars($data);
+    }
+}
+
+function toast($type, $message)
+{
+    // Validate the message type
+    $validTypes = ['success', 'error', 'info', 'warning'];
+    if (!in_array($type, $validTypes)) {
+        throw new \InvalidArgumentException('Invalid toastr message type');
+    }
+
+    // Store the message, type, and attributes in the session
+    $_SESSION['__flash_toastr'] = [
+        'message' => $message,
+        'type' => $type,
+    ];
+
+    $toastr = $_SESSION['__flash_toastr'] ?? null;
+    return $toastr;
+}
+
+function filterData($data, $filterCriteria)
+{
+    $filteredData = array();
+
+    foreach ($data as $row) {
+        $match = true;
+
+        foreach ($filterCriteria as $key => $value) {
+            if (!isset($row->$key) || $row->$key !== $value) {
+                $match = false;
+                break;
+            }
+        }
+
+        if ($match) {
+            $filteredData[] = $row;
+        }
+    }
+
+    return $filteredData;
+}
+
+function loadRequiredFiles($directoryPath)
+{
+    $requiredFileExtensions = ['php', 'txt', 'html']; // Define the file extensions you consider as required
+
+    if (!is_dir($directoryPath)) {
+        return []; // Return an empty array if the directory doesn't exist
+    }
+
+    $requiredFiles = [];
+
+    // Scan the directory for files
+    $files = scandir($directoryPath);
+
+    foreach ($files as $file) {
+        // Check if the file has one of the required extensions
+        $fileInfo = pathinfo($file);
+        if (in_array($fileInfo['extension'], $requiredFileExtensions)) {
+            $requiredFiles[] = $file;
+        }
+    }
+
+    return $requiredFiles;
+}
+
+function getSingleData($data, $dataKey)
+{
+    if ($data && isset($data->$dataKey)) {
+        return $data->$dataKey;
+    } else {
+        return null;
+    }
+}
+
+function getCombinedData($data, ...$dataKeys)
+{
+    if ($data) {
+        $combinedData = '';
+
+        foreach ($dataKeys as $dataKey) {
+            if (isset($data->$dataKey)) {
+                $combinedData .= $data->$dataKey . ' ';
+            } else {
+                return null; // Return null if any of the keys is not set.
+            }
+        }
+
+        return trim($combinedData); // Remove trailing space and return the combined data.
+    } else {
+        return null;
+    }
+}

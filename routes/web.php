@@ -14,4 +14,4 @@ use Voltage\app\controllers\SiteController;
 
  /** @var Voltage $voltage */
 
-$voltage->router->get("/home", [SiteController::class,"index"]);
+$voltage->router->get("/", [SiteController::class,"index"]);

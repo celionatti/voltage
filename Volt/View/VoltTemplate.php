@@ -183,7 +183,7 @@ class VoltTemplate
         return file_exists($cache) && filemtime($cache) >= filemtime($this->viewPath . $view . '.php');
     }
 
-    public function partial($path, $params = []): void
+    public static function partial($path, $params = []): void
     {
         $fullPath = Voltage::$voltage->pathResolver->templatePath(DIRECTORY_SEPARATOR . 'partials' . DIRECTORY_SEPARATOR . $path . '.php');
         if (file_exists($fullPath)) {
@@ -192,7 +192,7 @@ class VoltTemplate
         }
     }
 
-    public function packagePartial($path, $params = []): void
+    public static function packagePartial($path, $params = []): void
     {
         $fullPath = Voltage::$voltage->pathResolver->packageTemplatePath(DIRECTORY_SEPARATOR . 'partials' . DIRECTORY_SEPARATOR . $path . '.php');
         if (file_exists($fullPath)) {

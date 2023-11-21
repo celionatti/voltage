@@ -4,15 +4,30 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Auth Layout | Auth</title>
+    <link type="text/css" rel="stylesheet" href="<?= getPackageAssets("fontawesome/all.min.css") ?>">
+    <link type="text/css" rel="stylesheet" href="<?= getPackageAssets("volt/volt.css") ?>">
     <link type="text/css" rel="stylesheet" href="<?= getPackageAssets("bootstrap/css/bootstrap.min.css") ?>">
+    <link type="text/css" rel="stylesheet" href="<?= getPackageAssets("toastr/toastr.min.css") ?>">
   </head>
-  <body>
-    <main class="container">
-      @yield('content')
-    </main>
+  <body class="sb-nav-fixed">
+  <?= packagePartial("volt-header") ?>
+    <div id="layoutSidenav">
+        <?= packagePartial("volt-sidebar") ?>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <!-- Your Content goes in here. -->
+                    @yield('content')
+                </div>
+            </main>
+            <?= packagePartial("volt-footer") ?>
+        </div>
+    </div>
 
     <script src="<?= getPackageAssets("jquery/jquery-3.6.3.min.js") ?>"></script>
     <script src="<?= getPackageAssets('toastr/toastr.min.js'); ?>"></script>
+    <script src="<?= getPackageAssets('volt/volt.js'); ?>"></script>
     <script src="<?= getPackageAssets('bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
     <script>
         toastr.options = {

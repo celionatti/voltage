@@ -14,4 +14,4 @@ use celionatti\Packages\volt\controllers\VoltController;
 
  /** @var Voltage $voltage */
 
-$voltage->router->get("/", [VoltController::class,"volt"]);
+$voltage->router->get("/volt-admin", [VoltController::class,"volt"]);
